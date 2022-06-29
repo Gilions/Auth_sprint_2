@@ -1,0 +1,1 @@
+{"buildTargets":["build","down","lint","rebuild","rebuild_app","stop","test","up"],"launchTargets":[],"customConfigurationProvider":{"workspaceBrowse":{"browsePath":[],"compilerArgs":[]},"fileIndex":[]}}

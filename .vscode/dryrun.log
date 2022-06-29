@@ -1,0 +1,4 @@
+make: Entering directory `/Users/vitalijsofronuk/Practicum/dev/Auth_sprint_2'
+isort ./app && flake8 ./app
+make: Leaving directory `/Users/vitalijsofronuk/Practicum/dev/Auth_sprint_2'
+ 
