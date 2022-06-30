@@ -1,4 +1,20 @@
 # Проектная работа 7 спринта
+<p align="left">
+    <a href="https://www.python.org/" target="blank">
+        <img src="https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white" />
+    </a>
+    <a href="https://flask.palletsprojects.com/en/2.1.x/" target="blank">
+        <img src="https://img.shields.io/badge/flask-%23000.svg?style=for-the-badge&logo=flask&logoColor=white"/>
+    </a>
+    <a href="https://redis.io/" target="blank">
+        <img src="https://img.shields.io/badge/redis-%23DD0031.svg?&style=for-the-badge&logo=redis&logoColor=white"/>
+    </a>
+    <a href="https://docs.docker.com/" target="blank">
+        <img alt="Docker" src="https://img.shields.io/badge/Docker-2CA5E0?style=for-the-badge&logo=docker&logoColor=white">
+    </a>
+</p>
+
+Ссылка на репозиторий - [Auth_sprint_2](https://github.com/Gilions/Auth_sprint_2)
 
 Упростите регистрацию и аутентификацию пользователей в Auth-сервисе, добавив вход через социальные сервисы. Список сервисов выбирайте исходя из целевой аудитории онлайн-кинотеатра — подумайте, какими социальными сервисами они пользуются. Например, использовать [OAuth от Github](https://docs.github.com/en/free-pro-team@latest/developers/apps/authorizing-oauth-apps){target="_blank"} — не самая удачная идея. Ваши пользователи не разработчики и вряд ли имеют аккаунт на Github. А вот добавить Twitter, Facebook, VK, Google, Yandex или Mail будет хорошей идеей.
 

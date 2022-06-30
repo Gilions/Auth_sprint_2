@@ -23,10 +23,12 @@ def init_datastore_commands(app: Flask):
 
     @app.cli.command()
     def init_admin():
-        user = user_datastore.create_user(
-            email='admin@admin.ru',
-            password='admin'
-        )
-        role = user_datastore.find_or_create_role(name='admin', description='Администратор')
-        user.roles.append(role)
-        db.session.commit()
+        user = user_datastore.find_user(email='admin@admin.ru')
+        if not user:
+            user = user_datastore.create_user(
+                email='admin@admin.ru',
+                password='admin'
+            )
+            role = user_datastore.find_or_create_role(name='admin', description='Администратор')
+            user.roles.append(role)
+            db.session.commit()

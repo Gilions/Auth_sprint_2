@@ -16,4 +16,4 @@ COPY ./tests tests/
 
 ENV PYTHONPATH=.
 
-CMD ["gunicorn", "-b", "0.0.0.0:8000", "wsgi:app", "-k", "gevent"]
+ENTRYPOINT ["/app/entrypoint.sh"]
