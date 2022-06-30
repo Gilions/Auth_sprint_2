@@ -54,6 +54,7 @@
     * Логин - admin@admin.ru
     * Пароль - admin
 6. По умолчанию будут созданы роли:
+    * admin
     * manager
     * user
 
