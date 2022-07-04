@@ -134,3 +134,19 @@ class UserSessions(QuerysetMixin):
     user_id = db.Column(db.Integer, db.ForeignKey('users.pk'), nullable=False)
     user_agent = db.Column(db.Text, nullable=False)
     last_login = db.Column(db.DateTime(timezone=True), nullable=False)
+
+
+class OauthServices(QuerysetMixin):
+    __tablename__ = 'oauth_services'
+
+    service = db.Column(db.String(150), nullable=False)
+    host = db.Column(db.String(255), nullable=False)
+    client_id = db.Column(db.String(255), nullable=False)
+    client_secret = db.Column(db.String(255), nullable=False)
+
+    @classmethod
+    def get_service(cls, service: str):
+        instance = cls.query.filter_by(service=service).first()
+        if not instance:
+            raise ValidationError([f'Service "{service}" does not exist'], field_name='service')
+        return instance
