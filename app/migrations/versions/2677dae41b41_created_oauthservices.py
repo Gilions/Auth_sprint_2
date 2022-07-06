@@ -22,6 +22,7 @@ def upgrade():
                                      sa.Column('pk', sa.Integer(), nullable=False),
                                      sa.Column('service', sa.String(length=150), nullable=False),
                                      sa.Column('host', sa.String(length=255), nullable=False),
+                                     sa.Column('version', sa.String(length=30)),
                                      sa.Column('client_id', sa.String(length=255), nullable=False),
                                      sa.Column('client_secret', sa.String(length=255), nullable=False),
                                      sa.PrimaryKeyConstraint('pk')
@@ -32,7 +33,7 @@ def upgrade():
         [
             {
                 'service': 'yandex',
-                'host': 'https://oauth.yandex.ru/',
+                'host': 'https://oauth.yandex.ru',
                 'client_id': 'a1907e5727a84d1b966211a51fd70cef',
                 'client_secret': '04b9de8af10944278fa9352f3012fe2e'
             }

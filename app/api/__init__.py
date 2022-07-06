@@ -1,4 +1,5 @@
 from api.v1.auth import api as auth_ns1
+from api.v1.oauth import api as oauth_ns1
 from api.v1.roles import api as role_ns1
 from api.v1.roles_manager import api as role_ns2
 from api.v1.users import api as users_ns1
@@ -16,6 +17,7 @@ api = Api(blueprint,
           authorizations=authorizations)
 
 api.add_namespace(auth_ns1)
+api.add_namespace(oauth_ns1)
 api.add_namespace(users_ns1)
 api.add_namespace(role_ns1)
 api.add_namespace(role_ns2)

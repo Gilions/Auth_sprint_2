@@ -136,11 +136,24 @@ class UserSessions(QuerysetMixin):
     last_login = db.Column(db.DateTime(timezone=True), nullable=False)
 
 
+class UserOauthServices(QuerysetMixin, TimestampMixin):
+    __tablename__ = 'user_oauth_services'
+
+    user_id = db.Column(db.Integer, db.ForeignKey('users.pk'), nullable=False)
+    service = db.Column(db.String(150), nullable=False)
+    access_token = db.Column(db.Text)
+    refresh_token = db.Column(db.Text)
+    token_type = db.Column(db.String(150))
+    access_token_expires = db.Column(db.DateTime(timezone=True))
+    refresh_token_expires = db.Column(db.DateTime(timezone=True))
+
+
 class OauthServices(QuerysetMixin):
     __tablename__ = 'oauth_services'
 
     service = db.Column(db.String(150), nullable=False)
     host = db.Column(db.String(255), nullable=False)
+    version = db.Column(db.String(30))
     client_id = db.Column(db.String(255), nullable=False)
     client_secret = db.Column(db.String(255), nullable=False)
 

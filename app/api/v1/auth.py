@@ -13,7 +13,6 @@ from settings.datastore import security
 from settings.jwt import jwt_redis_blocklist
 
 
-
 api = Namespace('auth', description='Authorization')
 signup_schema = api.model('Signup', {
     'pk': fields.String(readonly=True, description='Unique identifier'),
