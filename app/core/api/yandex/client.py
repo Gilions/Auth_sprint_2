@@ -6,13 +6,24 @@ from core.helpers import ClientResponse
 class ApiRestClient(BaseAPIClient):
 
     def method_request(
-            self, http_method, method_url, data=None, headers=None, query_params=None, host=None) -> ClientResponse:
+            self,
+            http_method,
+            method_url,
+            data=None,
+            headers=None,
+            query_params=None,
+            host=None) -> ClientResponse:
         request_headers = {
             'Content-Type': 'application/x-www-form-urlencoded'
         }
         request_headers.update(headers or {})
         return self._make_request(
-            http_method, f'{method_url}', data, request_headers, query_params=query_params, host=host
+            http_method,
+            f'{method_url}',
+            data,
+            request_headers,
+            query_params=query_params,
+            host=host
         )
 
     def get_credentials(self, secret_code: str):

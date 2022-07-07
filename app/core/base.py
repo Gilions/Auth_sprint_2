@@ -14,7 +14,7 @@ from werkzeug.exceptions import GatewayTimeout, PreconditionFailed, ServiceUnava
 
 fields = ['host', 'version', 'client_id', 'client_secret']
 APICredentials = namedtuple('APICredentials', fields, defaults=(None,) * len(fields))
-ClientAPICredentials = namedtuple('APICredentials', ['host', 'version', 'client_id', 'client_secret'])
+ClientAPICredentials = namedtuple('APICredentials', fields)
 
 
 class BaseAPIRouter:
@@ -80,7 +80,8 @@ class BaseAPIClient:
         return ClientResponse(response)
 
     def post_request(self, url, data, headers=None, params=None):
-        response = requests.post(url, data=data, headers=headers, params=params, timeout=self.timeout_params)
+        response = requests.post(
+            url, data=data, headers=headers, params=params, timeout=self.timeout_params)
         return ClientResponse(response)
 
     def patch_request(self, url, data, headers=None):
@@ -104,12 +105,19 @@ class BaseAPIClient:
         wait=wait_exponential(multiplier=1, min=2, max=10),
         reraise=True,
     )
-    def _do_make_request(self, http_method, url, data=None, request_headers=None, query_params=None) -> ClientResponse:
+    def _do_make_request(
+            self,
+            http_method,
+            url,
+            data=None,
+            request_headers=None,
+            query_params=None) -> ClientResponse:
         try:
             if http_method == 'GET':
                 response = self.get_request(url, headers=request_headers, data=data)
             elif http_method == 'POST':
-                response = self.post_request(url, headers=request_headers, data=data, params=query_params)
+                response = self.post_request(
+                    url, headers=request_headers, data=data, params=query_params)
             elif http_method == 'PATCH':
                 response = self.patch_request(url, headers=request_headers, data=data)
             elif http_method == 'PUT':
@@ -145,9 +153,11 @@ class BaseAPIClient:
             raise
         return response
 
-    def method_request(self, http_method, url, data=None, headers=None, query_params=None) -> ClientResponse:
+    def method_request(
+            self, http_method, url, data=None, headers=None, query_params=None) -> ClientResponse:
         request_headers = {
             'Content-Type': 'application/json'
         }
         request_headers.update(headers or {})
-        return self._make_request(http_method, url, data, request_headers, query_params=query_params)
+        return self._make_request(
+            http_method, url, data, request_headers, query_params=query_params)

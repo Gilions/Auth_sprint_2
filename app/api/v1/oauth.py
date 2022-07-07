@@ -80,8 +80,10 @@ class Code(Resource):
             access_token=credentials.get('access_token'),
             refresh_token=credentials.get('refresh_token'),
             token_type=credentials.get('token_type'),
-            access_token_expires=datetime.utcnow() + timedelta(seconds=credentials.get('expires_in')),
-            refresh_token_expires=datetime.utcnow() + timedelta(seconds=credentials.get('expires_in'))
+            access_token_expires=datetime.utcnow() + timedelta(
+                seconds=credentials.get('expires_in')),
+            refresh_token_expires=datetime.utcnow() + timedelta(
+                seconds=credentials.get('expires_in'))
         )
         # Создаем, либо обновляем OAuth сервис пользователя
         create_or_update_user_service(oauth_service)

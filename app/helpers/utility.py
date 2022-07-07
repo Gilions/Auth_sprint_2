@@ -91,7 +91,9 @@ def create_new_user(data: dict):
 def create_or_update_user_service(data: dict):
     # Регистрируем либо обновляем OAuth сервис пользователя.
     from models import UserOauthServices
-    user_service = UserOauthServices.query.filter_by(user_id=data.get('user_id'), service=data.get('service')).first()
+    user_service = UserOauthServices.query.filter_by(
+        user_id=data.get('user_id'), service=data.get('service')
+    ).first()
     if not user_service:
         UserOauthServices.create(**data)
     else:

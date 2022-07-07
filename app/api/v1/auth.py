@@ -1,5 +1,5 @@
 from datetime import datetime, timedelta
-from http.client import CREATED, NOT_FOUND, OK, UNPROCESSABLE_ENTITY
+from http.client import CREATED, NOT_FOUND, OK
 
 from flask import request
 from flask_jwt_extended import create_access_token, get_jwt, get_jwt_identity, jwt_required
