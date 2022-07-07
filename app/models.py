@@ -138,10 +138,11 @@ class UserSessions(QuerysetMixin):
 
 class UserOauthServices(QuerysetMixin, TimestampMixin):
     __tablename__ = 'user_oauth_services'
+    __table_args__ = (db.UniqueConstraint('user_id', 'service', name='_user_service_uc'),)
 
     user_id = db.Column(db.Integer, db.ForeignKey('users.pk'), nullable=False)
     service = db.Column(db.String(150), nullable=False)
-    access_token = db.Column(db.Text)
+    access_token = db.Column(db.Text, index=True)
     refresh_token = db.Column(db.Text)
     token_type = db.Column(db.String(150))
     access_token_expires = db.Column(db.DateTime(timezone=True))

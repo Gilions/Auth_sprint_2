@@ -1,10 +1,9 @@
 from functools import reduce
 
-from requests import codes
-
-from werkzeug.exceptions import PreconditionFailed, ServiceUnavailable, BadRequest
-
 from core.errors import InvalidResponseError
+from requests import codes
+from werkzeug.exceptions import BadRequest, PreconditionFailed, ServiceUnavailable
+
 
 RATE_LIMIT_CODE = 420  # Enhance your calm
 
