@@ -9,6 +9,7 @@ from http.client import BAD_REQUEST, UNPROCESSABLE_ENTITY
 from flask_restx import abort
 from marshmallow import ValidationError
 from settings.config import PROJECT_NAME
+from user_agents import parse
 
 
 logger = logging.getLogger(PROJECT_NAME)
@@ -100,3 +101,14 @@ def create_or_update_user_service(data: dict):
         data = {key: data[key] for key in data if key not in {'user_id', 'service'}}
         data.update(dict(updated_at=datetime.utcnow()))
         user_service.update(**data)
+
+
+def get_user_device_type(ua_string: str):
+    user_agent = parse(ua_string)
+    if user_agent.is_mobile:
+        user_device_type = 'mobile'
+    elif user_agent.is_tablet:
+        user_device_type = 'smart'
+    else:
+        user_device_type = 'web'
+    return user_device_type

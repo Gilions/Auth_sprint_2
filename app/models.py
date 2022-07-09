@@ -12,7 +12,7 @@ from sqlalchemy.orm import validates
 class QuerysetMixin(db.Model):
     __abstract__ = True
 
-    pk = db.Column(db.Integer, primary_key=True)
+    pk = db.Column(db.Integer, primary_key=True, autoincrement=True)
 
     @classmethod
     def get_by_pk(cls, pk):
@@ -130,10 +130,20 @@ class User(TimestampMixin, UserMixin, QuerysetMixin):
 
 class UserSessions(QuerysetMixin):
     __tablename__ = 'user_sessions'
+    __table_args__ = (
+        db.UniqueConstraint('pk', 'user_device_type'),
+        {
+            'postgresql_partition_by': 'LIST (user_device_type)',
+        }
+    )
 
     user_id = db.Column(db.Integer, db.ForeignKey('users.pk'), nullable=False)
     user_agent = db.Column(db.Text, nullable=False)
     last_login = db.Column(db.DateTime(timezone=True), nullable=False)
+    user_device_type = db.Column(db.Text, primary_key=True)
+
+    def __repr__(self):
+        return f'<UserSignIn {self.user_id}:{self.last_login}>'
 
 
 class UserOauthServices(QuerysetMixin, TimestampMixin):
