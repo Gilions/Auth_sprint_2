@@ -9,7 +9,12 @@ from core.consts import YANDEX_SERVICE
 from flask import redirect, request
 from flask_restx import Namespace, Resource, abort, fields
 from helpers.parsers import callback_code_parser
-from helpers.utility import create_new_user, create_or_update_user_service, generate_password
+from helpers.utility import (
+    create_new_user,
+    create_or_update_user_service,
+    generate_password,
+    get_user_device_type,
+)
 from models import OauthServices, User, UserSessions
 
 
@@ -86,7 +91,8 @@ class Code(Resource):
         new_session = UserSessions(
             user_id=user.pk,
             user_agent=request.headers.get('User-Agent'),
-            last_login=datetime.utcnow()
+            last_login=datetime.utcnow(),
+            user_device_type=get_user_device_type(request.headers.get('User-Agent'))
         )
         new_session.save()
         response = user.get_jwt_token()

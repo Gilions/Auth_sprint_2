@@ -20,7 +20,9 @@ user_schema = api.model('Profile', {
 
 user_sessions_schema = api.model('UserSessions', {
     'user_agent': fields.String(readonly=True),
+    'user_device_type': fields.String(readonly=True),
     'last_login': fields.DateTime(readonly=True)
+
 })
 
 pagination_schema = api.model('UserSessionPaginate', {
