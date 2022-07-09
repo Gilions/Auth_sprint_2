@@ -15,8 +15,8 @@ PROJECT_NAME = os.environ.get('PROJECT_NAME', 'Auth')
 class Configuration(object):
     DEBUG = False
     TESTING = False
-    SECRET_KEY = os.environ.get('SECRET_KEY', '')
-    SECURITY_PASSWORD_SALT = os.environ.get('SECURITY_PASSWORD_SALT', '')
+    SECRET_KEY = os.environ.get('SECRET_KEY', 'very_secret')
+    SECURITY_PASSWORD_SALT = os.environ.get('SECURITY_PASSWORD_SALT', 'very_salt')
     PROPAGATE_EXCEPTIONS = True
     JWT_TOKEN_LOCATION = 'headers'
     ACCESS_TOKEN_EXPIRE_TIME = 60 * 60

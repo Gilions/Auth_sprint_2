@@ -159,7 +159,7 @@ class OauthServices(QuerysetMixin):
     client_secret = db.Column(db.String(255), nullable=False)
 
     @classmethod
-    def get_service(cls, service: str):
+    def get_service(cls, service: str) -> 'OauthServices':
         instance = cls.query.filter_by(service=service).first()
         if not instance:
             raise ValidationError([f'Service "{service}" does not exist'], field_name='service')
