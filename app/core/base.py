@@ -150,7 +150,7 @@ class BaseAPIClient:
             )
         except Exception as e:
             logging.warning(msg=str(e))
-            raise
+            raise e
         return response
 
     def method_request(

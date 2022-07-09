@@ -30,6 +30,7 @@ class UserSchema(ma.SQLAlchemySchema):
         validate=[validate.Length(max=50)]
     )
     created_at = fields.Date(required=False)
+    active = fields.Boolean()
 
     class Meta:
         model = User

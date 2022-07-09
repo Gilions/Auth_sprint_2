@@ -3,10 +3,10 @@ from http.client import NOT_FOUND, OK
 from urllib import parse
 from urllib.parse import urlencode
 
-from core.api.yandex.client import ApiRestClient
-from core.api.yandex.router import APIRouter
+from core.api.client import ApiRestClient
+from core.api.router import APIRouter
 from core.consts import YANDEX_SERVICE
-from flask import request
+from flask import redirect, request
 from flask_restx import Namespace, Resource, abort, fields
 from helpers.parsers import callback_code_parser
 from helpers.utility import (
@@ -18,11 +18,8 @@ from helpers.utility import (
 from models import OauthServices, User, UserSessions
 
 
-api = Namespace('connect', description='OAuth')
+api = Namespace('oauth/yandex', description='Yandex OAuth')
 
-yandex_link_schema = api.model('OAuthLink', {
-    'oauth_link': fields.String(readonly=True, description='Link for OAuth identifications.')
-})
 oauth_schema = api.model('Tokens', {
     'access_token': fields.String(readonly=True, description='Access token'),
     'refresh_token': fields.String(readonly=True, description='Refresh token'),
@@ -31,29 +28,26 @@ oauth_schema = api.model('Tokens', {
 })
 
 
-@api.route('/yandex/')
+@api.route('/redirect/')
 class YandexOauth(Resource):
-    @api.doc(description='Get Yandex OAuth link')
-    @api.marshal_with(yandex_link_schema, code=OK)
+    @api.doc(description='Yandex oauth redirect link')
     def get(self):
         yandex_settings = OauthServices.get_service(service=YANDEX_SERVICE)
 
         if not yandex_settings:
             abort(NOT_FOUND, errors=['Настройки сервиса не найдены!'])
 
-        url = f'{yandex_settings.host}/authorize'
+        url = f'{yandex_settings.host}/authorize?'
         params = dict(
             response_type='code',
             client_id=yandex_settings.client_id
         )
-        url_parts = list(parse.urlparse(url))
-        query = dict(parse.parse_qsl(url_parts[4]))
-        query.update(params)
-        url_parts[4] = urlencode(query)
-        return dict(oauth_link=parse.urlunparse(url_parts))
+
+        url = url + urlencode(params)
+        return redirect(url)
 
 
-@api.route('/yandex/code/')
+@api.route('/code/')
 class Code(Resource):
     @api.doc(description='Authorization with Yandex service.')
     @api.expect(callback_code_parser)
@@ -64,8 +58,8 @@ class Code(Resource):
         router = APIRouter(service=YANDEX_SERVICE)
         client = ApiRestClient(router)
 
-        credentials = client.get_credentials(secret_code=str(args.get('code')))
-        user_info = client.get_user_info(access_token=credentials.get('access_token'))
+        user_credentials = client.get_yandex_user_credentials(secret_code=str(args.get('code')))
+        user_info = client.get_yandex_user_info(access_token=user_credentials.get('access_token'))
         user = User.query.filter_by(email=user_info.get('default_email')).first()
 
         # Создаем пользователя, если ранее не был зарегистрирован.
@@ -76,22 +70,23 @@ class Code(Resource):
                 password=temporary_password,
                 first_name=user_info.get('first_name', None),
                 last_name=user_info.get('last_name', None),
+                active=True
             )
             user = create_new_user(data)
 
-        oauth_service = dict(
+        user_oauth_service = dict(
             user_id=user.pk,
             service=YANDEX_SERVICE,
-            access_token=credentials.get('access_token'),
-            refresh_token=credentials.get('refresh_token'),
-            token_type=credentials.get('token_type'),
+            access_token=user_credentials.get('access_token'),
+            refresh_token=user_credentials.get('refresh_token'),
+            token_type=user_credentials.get('token_type'),
             access_token_expires=datetime.utcnow() + timedelta(
-                seconds=credentials.get('expires_in')),
+                seconds=user_credentials.get('expires_in')),
             refresh_token_expires=datetime.utcnow() + timedelta(
-                seconds=credentials.get('expires_in'))
+                seconds=user_credentials.get('expires_in'))
         )
         # Создаем, либо обновляем OAuth сервис пользователя
-        create_or_update_user_service(oauth_service)
+        create_or_update_user_service(user_oauth_service)
         # Создаем новую сессию
         new_session = UserSessions(
             user_id=user.pk,
@@ -101,5 +96,6 @@ class Code(Resource):
         )
         new_session.save()
         response = user.get_jwt_token()
-        response.update(dict(temporary_password=temporary_password))
+        if temporary_password:
+            response.update(temporary_password=temporary_password)
         return response
