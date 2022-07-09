@@ -1,17 +1,15 @@
 from datetime import datetime, timedelta
-from http.client import BAD_REQUEST, CREATED, NOT_FOUND, OK, UNPROCESSABLE_ENTITY
+from http.client import CREATED, NOT_FOUND, OK
 
 from flask import request
 from flask_jwt_extended import create_access_token, get_jwt, get_jwt_identity, jwt_required
 from flask_restx import Namespace, Resource, abort, fields
 from flask_security.utils import verify_password
 from helpers.parsers import login_parser, signup_parser
-from marshmallow import ValidationError
-from models import Role, User, UserSessions
+from helpers.utility import create_new_user
+from models import User, UserSessions
 from settings.config import Configuration
-from settings.datastore import security
 from settings.jwt import jwt_redis_blocklist
-
 
 
 api = Namespace('auth', description='Authorization')
@@ -45,19 +43,9 @@ class SignUp(Resource):
     @api.expect(signup_parser)
     @api.marshal_with(signup_schema, code=CREATED)
     def post(self):
-        from schemas.users import UserSchema
-
         data = signup_parser.parse_args()
-        try:
-            validated_data = UserSchema().load(data)
-            user = User.create(**validated_data)
-            role = Role.get_by_name('user')
-            user.add_role(role, security)
-            return user, CREATED
-        except ValidationError as err:
-            abort(UNPROCESSABLE_ENTITY, errors=err.messages)
-        except Exception as err:
-            abort(BAD_REQUEST, errors=str(err))
+        user = create_new_user(data)
+        return user, CREATED
 
 
 @api.route('/login/')

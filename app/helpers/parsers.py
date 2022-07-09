@@ -129,3 +129,12 @@ role_manager_parser.add_argument(
     help='Role',
     location='json'
 )
+
+callback_code_parser = reqparse.RequestParser(bundle_errors=True)
+callback_code_parser.add_argument(
+    'code',
+    required=True,
+    type=int,
+    help='Callback code',
+    location='args'
+)

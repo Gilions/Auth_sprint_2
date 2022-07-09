@@ -44,12 +44,14 @@ services:
       context: .
       dockerfile: Dockerfile
     container_name: auth_app
+    image: flask-image
     env_file:
       - ./.env
+    volumes:
+      - ./app:/app
     depends_on:
       - db
       - redis
-    image: flask-image
 #================================
 #       NGINX
 #================================

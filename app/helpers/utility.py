@@ -1,7 +1,13 @@
 import logging
+import secrets
+import string
 import time
+from datetime import datetime
 from functools import wraps
+from http.client import BAD_REQUEST, UNPROCESSABLE_ENTITY
 
+from flask_restx import abort
+from marshmallow import ValidationError
 from settings.config import PROJECT_NAME
 
 
@@ -55,3 +61,42 @@ def backoff(
         return inner
 
     return func_wrapper
+
+
+def generate_password():
+    # Генерируем временный пароль
+    alphabet = string.ascii_letters + string.digits
+    password = ''.join(secrets.choice(alphabet) for _ in range(20))
+    return password
+
+
+def create_new_user(data: dict):
+    # Создаем нового пользователя
+    from models import Role, User
+    from schemas.users import UserSchema
+    from settings.datastore import security
+
+    try:
+        validated_data = UserSchema().load(data)
+        user = User.create(**validated_data)
+        role = Role.get_by_name('user')
+        user.add_role(role, security)
+        return user
+    except ValidationError as err:
+        abort(UNPROCESSABLE_ENTITY, errors=err.messages)
+    except Exception as err:
+        abort(BAD_REQUEST, errors=str(err))
+
+
+def create_or_update_user_service(data: dict):
+    # Регистрируем либо обновляем OAuth сервис пользователя.
+    from models import UserOauthServices
+    user_service = UserOauthServices.query.filter_by(
+        user_id=data.get('user_id'), service=data.get('service')
+    ).first()
+    if not user_service:
+        UserOauthServices.create(**data)
+    else:
+        data = {key: data[key] for key in data if key not in {'user_id', 'service'}}
+        data.update(dict(updated_at=datetime.utcnow()))
+        user_service.update(**data)
