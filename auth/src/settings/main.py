@@ -2,12 +2,11 @@ from api import init_api
 from flask import Flask, request
 from flask_marshmallow import Marshmallow
 from opentelemetry.instrumentation.flask import FlaskInstrumentor
-
 from settings.config import configuration
 from settings.database import init_db
 from settings.datastore import init_datastore, init_datastore_commands
-from settings.jwt import init_jwt
 from settings.inc_rate_limitter import init_rate_limiter
+from settings.jwt import init_jwt
 
 
 app = Flask(__name__)
