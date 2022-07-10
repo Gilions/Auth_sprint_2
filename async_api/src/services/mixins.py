@@ -14,7 +14,7 @@ from models.film import Film
 from models.genre import Genre
 from models.person import Person
 from pydantic import parse_obj_as
-from helpers.utility import backoff
+from utils import backoff
 
 MODEL_TYPES = Union[Film, Person, Genre]
 

@@ -10,9 +10,7 @@ services:
       - postgres_data:/var/lib/postgresql/data/
     env_file:
       - .env
-#    # Пот открыт временно.
-#    ports:
-#      - "5432:5432"
+
   #================================
   #       Redis
   #================================
@@ -99,6 +97,16 @@ services:
       - ./nginx/configs:/etc/nginx/conf.d:ro
     depends_on:
       - auth_app
+
+  #================================
+  #       JAEGER
+  #================================
+  jaeger:
+    image: jaegertracing/all-in-one:1.36.0
+    container_name: jaeger
+    restart: always
+    ports:
+      - "16686:16686"
 
 #================================
 #         NETWORK

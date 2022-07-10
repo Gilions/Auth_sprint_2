@@ -38,6 +38,9 @@ class Configuration(object):
 
     PAGINATION_PER_PAGE = os.environ.get('PAGINATION_PER_PAGE', 10)
 
+    JAEGER_HOST = os.environ.get('JAEGER_HOST', 'jaeger')
+    JAEGER_PORT = os.environ.get('JAEGER_PORT', 6831)
+
 
 class ProductionConfig(Configuration):
     FLASK_ENV = 'production'

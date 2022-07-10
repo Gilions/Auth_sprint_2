@@ -85,6 +85,6 @@ class ProfileSessions(Resource):
 @api.route('/check_token/')
 class UserCheck(Resource):
     @api.doc(description='Check user authorization')
-    @jwt_required()
+    # @jwt_required()
     def post(self):
         return {'success': True}, 200
