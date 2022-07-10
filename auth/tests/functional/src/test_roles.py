@@ -1,7 +1,7 @@
 from http import HTTPStatus
 
 import pytest
-from tests.functional.utils.helpers import get_endpoint_url
+from tests.functional.utils.helper import get_endpoint_url
 
 
 class TestRoles:

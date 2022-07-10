@@ -1,6 +1,6 @@
 import redis
 from settings.config import configuration
-from utils import backoff
+from helpers.utility import backoff
 
 
 @backoff()
