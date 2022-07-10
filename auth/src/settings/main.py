@@ -5,6 +5,7 @@ from settings.config import configuration
 from settings.database import init_db
 from settings.datastore import init_datastore, init_datastore_commands
 from settings.jwt import init_jwt
+from settings.inc_rate_limitter import init_rate_limiter
 
 
 app = Flask(__name__)
@@ -15,6 +16,7 @@ init_datastore(app)
 init_datastore_commands(app)
 init_api(app)
 init_jwt(app)
+init_rate_limiter(app)
 
 ma = Marshmallow(app)
 

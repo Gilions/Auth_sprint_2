@@ -27,6 +27,9 @@ class Configuration(object):
     REDIS_PORT = os.environ.get('REDIS_PORT', 6379)
     REDIS_URI = f'redis://{REDIS_HOST}:{REDIS_PORT}/0'
 
+    RATELIMIT_ENABLED = True
+    RATELIMIT_STORAGE_URI = f'redis://{REDIS_HOST}:{REDIS_PORT}/1'
+
     APP_HOST = os.environ.get('API_HOST', 'localhost')
     APP_PORT = os.environ.get('API_PORT', 82)
     APP_WORKERS = os.environ.get('APP_WORKERS', 2)

@@ -43,7 +43,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: auth_app
+    container_name: authorization_app
     image: flask-image
     env_file:
       - .env
