@@ -86,7 +86,8 @@ def create_new_user(data: dict):
     except ValidationError as err:
         abort(UNPROCESSABLE_ENTITY, errors=err.messages)
     except Exception as err:
-        abort(BAD_REQUEST, errors=str(err))
+        logger.error(err)
+        abort(BAD_REQUEST, errors='Не удалось создать нового юзера, попробуйте еще раз')
 
 
 def create_or_update_user_service(data: dict):

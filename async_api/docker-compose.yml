@@ -37,7 +37,7 @@ services:
       - elasticsearch
 
   nginx:
-    image: nginx:latest
+    image: nginx:1.23.0
     restart: always
     ports:
       - '81:81'

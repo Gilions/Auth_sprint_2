@@ -87,7 +87,7 @@ class RedirectLink(Resource):
 
     @api.doc(description='VK oauth redirect link')
     def get(self):
-        settings = OauthServices.get_service(service='vk')
+        settings = OauthServices.get_service(service=VK_SERVICE)
         if not settings:
             abort(NOT_FOUND, errors=['Настройки сервиса не найдены!'])
 

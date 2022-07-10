@@ -10,7 +10,7 @@ services:
       - postgres_data:/var/lib/postgresql/data/
     env_file:
       - .env
-    # Пот открыт временно.
+    # Порт открыт временно.
     ports:
       - "5432:5432"
 #================================
